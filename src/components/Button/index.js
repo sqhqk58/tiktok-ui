@@ -5,6 +5,7 @@ const cx = classNames.bind(styles)
 function Button({
         to, 
         hef, 
+        className,
         primary=false,
         outline=false,
         disabled=false,
@@ -14,6 +15,8 @@ function Button({
         rounded = false,
         children,
         onClick, 
+        leftIcon,
+        rightIcon,
         ...passProps
     }) {
     let Comp = 'button';
@@ -38,10 +41,21 @@ function Button({
         Comp = 'a'
     }
     
-    const classes = cx('wrapper',{primary,outline,text, small,large,disabled,rounded})
+    const classes = cx('wrapper',{
+        primary,
+        outline,
+        text, 
+        small,
+        large,
+        disabled,
+        rounded,
+        [className]: className,
+    })
     return ( 
         <Comp className={classes} {...props}>
-            <span>{children}</span>
+            {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
+            <span className={cx('title')}>{children}</span>
+            {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
         </Comp>
      );
 }
