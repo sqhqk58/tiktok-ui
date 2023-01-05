@@ -7,6 +7,7 @@ import Tippy from '@tippyjs/react/headless'; // different import path!
 import { useEffect, useState } from 'react';
 import { wrapper as PopperWrapper} from '~/components/popper'
 import AccountItem from '~/components/AccountItem';
+import Button from '~/components/Button';
 const cx = classNames.bind(styles)
 function Header() {
     const [searchResult,setSearchResult] = useState([])
@@ -50,7 +51,12 @@ function Header() {
 
                 </div>
             </Tippy>
-            <div className={cx('actions')}></div>
+            <div className={cx('actions')}>
+                <Button to="/register" text>Upload</Button>
+                <Button to="/login" primary>Login</Button>
+                <Button to="/login" primary rounded>Get App</Button>
+
+            </div>
         </div>
     </header>
 }
