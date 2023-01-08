@@ -6,6 +6,7 @@ import { wrapper as PopperWrapper} from '~/components/popper'
 import styles from '~/components/Layouts/components/Search/Search.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDebounce } from '~/hooks';
 const cx = classNames.bind(styles)
 function Search() {
     const [searchText, setSearchText] = useState('')
@@ -13,19 +14,20 @@ function Search() {
     const [showResults,setShowResults] = useState(false )
     const [loading,setLoading] = useState(false)
     const inputRef = useRef()
+    const debouce = useDebounce(searchText,500)
     useEffect(()=>{
         if(!searchText.trim()){
             setSearchResult([])
             return;
         }
         setLoading(true)
-       fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(searchText)}&type=less`)
+       fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debouce)}&type=less`)
        .then(res=>res.json())
        .then(res=>{
             setSearchResult(res.data)
             setLoading(false)
         })
-    },[searchText])
+    },[debouce])
 
     const handleHideResult  = ()=>{
         setShowResults(false)
