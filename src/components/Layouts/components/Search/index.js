@@ -1,5 +1,5 @@
 import Tippy from '@tippyjs/react/headless'; // different import path!
-import { faCircleXmark, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faMagnifyingGlass,faSpinner } from '@fortawesome/free-solid-svg-icons';
 import AccountItem from '~/components/AccountItem';
 import { Fragment, useEffect, useState, useRef } from 'react';
 import { wrapper as PopperWrapper} from '~/components/popper'
@@ -11,12 +11,21 @@ function Search() {
     const [searchText, setSearchText] = useState('')
     const [searchResult,setSearchResult] = useState([])
     const [showResults,setShowResults] = useState(false )
+    const [loading,setLoading] = useState(false)
     const inputRef = useRef()
     useEffect(()=>{
-        setTimeout(()=>{
-            setSearchResult([1,2,3])
-        },0)
-    },[])
+        if(!searchText.trim()){
+            setSearchResult([])
+            return;
+        }
+        setLoading(true)
+       fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(searchText)}&type=less`)
+       .then(res=>res.json())
+       .then(res=>{
+            setSearchResult(res.data)
+            setLoading(false)
+        })
+    },[searchText])
 
     const handleHideResult  = ()=>{
         setShowResults(false)
@@ -37,7 +46,9 @@ function Search() {
                     <div className={cx('search-results')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Account</h4>
-                            <AccountItem/>
+                            {searchResult.map(result=>(
+                                <AccountItem key={result.id} data={result}/>
+                            ))}
                         </PopperWrapper>
                         </div>
                 )}
@@ -52,12 +63,12 @@ function Search() {
                         spellCheck={false}
                         onChange={(e)=>setSearchText(e.target.value)}
                     />
-                    {!!searchText&&(
+                    {!!searchText&&!loading&&(
                         <button className={cx('clear')} onClick={()=>handleClear()}>
                             <FontAwesomeIcon icon={faCircleXmark} />
                         </button>
                     )}
-                    {/* <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> */}
+                    {loading&&(<FontAwesomeIcon className={cx('loading')} icon={faSpinner} />)}
                     
                         <button className={cx('search-btn')}>
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
