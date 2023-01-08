@@ -3,12 +3,12 @@ import classNames from 'classnames/bind';
 import image from '~/assets/images'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion, faCloudArrowUp, faEarthAsia, faEllipsisVertical, faKeyboard, faMoneyBill, faSignOut, faTools, faUser } from '@fortawesome/free-solid-svg-icons';
-
 import Tipppy from '@tippyjs/react'; // different import path!
 import 'tippy.js/dist/tippy.css';
 import Button from '~/components/Button';
 import Menu from '~/components/popper/Menu';
 import Image from '~/components/Image';
+import Search from '../Search';
 const MENU_ITEMS = [
     {
         icon: <FontAwesomeIcon icon={faEarthAsia}/>,
@@ -81,6 +81,7 @@ function Header() {
             <img src={image.logo} alt='logo'/>
             
             {/* Search */}
+            <Search/>
             {/* Main controller */}
             <div className={cx('actions')}>
             {currentUser?(
